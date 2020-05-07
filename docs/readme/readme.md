@@ -1,5 +1,7 @@
 # Anirath's Dotfiles #
+
 **Homepage -- [anirath.github.io/dotfiles][1]**
+
 **GitHub   -- [anirath/dotfiles][8]**
 
 ## WARNING ##

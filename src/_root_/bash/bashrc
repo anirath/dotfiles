@@ -1,0 +1,89 @@
+#############################
+# Bash Profile -- ~/.bashrc #
+# ------------------------- #
+# author   : anirath        #
+# created  : 2020.05.07     #
+# ------------------------- #
+#       anirath@pm.me       #
+#############################
+# -------------------------------------------------
+# Sourced by '~/.profile' to configure bash shells.
+# -------------------------------------------------
+# ===========
+# Quick Fixes
+# ===========
+# Quick fix for the lesspipe.
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# Conditional check for interactive shells.
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# Export the '$SHELL' variable with the current shell.
+export SHELL=${SHELL:-${BASH:-/bin/bash}}
+
+# ===============
+# History & Shopt
+# ===============
+# Configure the history file with builtin variables.
+export HISTFILE="$HOME/.bash_history"
+export HISTCONTROL=ignoreboth
+export HISTSIZE=500
+export HISTFILESIZE=1000
+
+# Setup 'shopt' with 'histappend', 'checkwinsize', and 'globstar' enabled.
+shopt -s histappend
+shopt -s checkwinsize
+shopt -s globstar
+
+# =============
+# Color Support
+# =============
+# Conditional check for 'dircolors' support.
+if [ -x /usr/bin/dircolors ]; then
+    # If 'dircolors' exists, and is executable, enable color support for the 'ls' and 'grep' commands.
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    export alias ls='ls --color=auto'
+    export alias dir='dir --color=auto'
+    export alias vdir='vdir --color=auto'
+    export alias grep='grep --color=auto'
+    export alias fgrep='fgrep --color=auto'
+    export alias egrep='egrep --color=auto'
+fi
+
+# Enable colored GCC warnings and notices by exporting the '$GCC_COLORS' builtin variable.
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# =======
+# Imports
+# =======
+# Aliases: ~/.bash_aliases -- contains all of the aliases set up for bash.
+if [ -f "$HOME/.bash_aliases" ]; then
+    . "$HOME/.bash_aliases"
+fi
+
+# Text Formatting: ~/.bash_txt -- exports useful variables for text formatting.
+if [ -f "$HOME/.bash_txt" ]; then
+    . "$HOME/.bash_txt"
+fi
+
+# Functions: ~/.bash_funcs -- declares common functions.
+if [ -f "$HOME/.bash_funcs" ]; then
+    . "$HOME/.bash_funcs"
+fi
+
+# ======
+# Prompt
+# ======
+# Setup the error status, timestamp, and shell type.
+PS1="\`prompt_fn_err\`${txt_fg_white}\t${txt_reset} [${txt_fg_green}\s${txt_reset}] "
+# Add the 'user@host' segment and a separator.
+PS1="${PS1}${txt_fg_red}${txt_bold}root${txt_reset} :: "
+# Add the CWD segment followed by the git segment.
+PS1="${PS1}\`prompt_fn_cwd\`${txt_reset} \`prompt_fn_git_branch\`${txt_reset}"
+# Start a new line and add the user prompt segment with indicator.
+PS1="${PS1}\n${txt_fg_yellow}##${txt_reset} "
+# Export the final '$PS1' variable to confirm the prompt.
+export PS1

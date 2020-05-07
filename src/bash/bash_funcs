@@ -21,14 +21,14 @@ function prompt_fn_cwd () {
     working_dir=$(pwd)
     # Check CWD permissions.
     if [ -w $working_dir ]; then
-        # If writable then set green text.
-        working_dir="${txt_fg_green}>>${txt_fg_blue} ${working_dir}"
+        # If writable then set colors to green and blue.
+        color_1="${txt_fg_green}" && color_2="${txt_fg_blue}"
     else
-        # If not writable then set red text.
-        working_dir="${txt_fg_red}>>${txt_fg_blue} ${working_dir}"
+        # If not writable then set to red and magenta on black bg.
+        color_1="${txt_fg_red}" && color_2="${txt_bg_black}${txt_fg_magenta}"
     fi
     # Return the CWD styled accordingly.
-    echo "$working_dir"
+    echo "${color_1}>> ${color_2}${txt_uline_on}${working_dir}${txt_reset}"
 }
 
 # prompt_fn_err() -- returns the current error code for use with the prompt.

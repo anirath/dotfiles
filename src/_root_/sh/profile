@@ -1,0 +1,31 @@
+###############################
+# Shell Profile -- ~/.profile #
+# --------------------------- #
+# author   : anirath          #
+# created  : 2020.05.07       #
+# --------------------------- #
+#        anirath@pm.me        #
+###############################
+# ----------------------------------------------------
+# Sourced for login shells by the command interpreter.
+# ----------------------------------------------------
+# =============
+# Env Variables
+# =============
+# -----------------
+# User Bins to PATH
+# -----------------
+# Default User Bin -- default at '~/.bin/'
+if [ -d "$HOME/.bin/" ] ; then
+    # If the default for the user's bin exists then prepend '$PATH' with it.
+    export PATH="$HOME/.bin/:$PATH"
+fi
+
+# ------------
+# Custom Paths
+# ------------
+# Snap Bin -- default at '/snap/bin/'
+if [ -d "/snap/bin/" ]; then
+    # If it exists then append it to the '$PATH'.
+    export PATH="$PATH:/snap/bin/"
+fi

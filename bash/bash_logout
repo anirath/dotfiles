@@ -1,0 +1,16 @@
+#################################
+# Bash Logout -- ~/.bash_logout #
+# ----------------------------- #
+# author   : anirath            #
+# created  : 2020.02.23         #
+# modified : 2020.05.06         #
+# ----------------------------- #
+#         anirath@pm.me         #
+#################################
+# -----------------------------------------------
+# Sourced when an interactive bash shell is quit.
+# -----------------------------------------------
+# Clear the console and scrollback.
+if [ "$SHLVL" = 1 ]; then
+    [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
+fi

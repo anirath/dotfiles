@@ -1,0 +1,56 @@
+###############################
+# Shell Profile -- ~/.profile #
+# --------------------------- #
+# author   : anirath          #
+# created  : 2020.02.23       #
+# modified : 2020.05.07       #
+# --------------------------- #
+#        anirath@pm.me        #
+###############################
+# ----------------------------------------------------
+# Sourced for login shells by the command interpreter.
+# ----------------------------------------------------
+# =============
+# Env Variables
+# =============
+# -----------
+# User's Bins
+# -----------
+# Games -- a user bin for games at '~/.games/'
+if [ -d "$HOME/.games" ]; then
+    # If the directory exists then prepend the '$PATH' with it.
+    PATH="$HOME/.games/:$PATH"
+fi
+
+# Scripts -- a user bin containing scripts at '~/.scripts/'
+if [ -d "$HOME/.scripts/" ]; then
+    # If it exists then prepend the '$PATH' with it.
+    PATH="$HOME/.scripts/:$PATH"
+fi
+
+# Default User Bin -- standard user bin at '~/.bin/'
+if [ -d "$HOME/.bin/" ] ; then
+    # If the default for the user's bin exists then prepend '$PATH' with it.
+    PATH="$HOME/.bin/:$PATH"
+fi
+
+# --------------
+# Xenv Variables
+# --------------
+export xenv_dir_dev="$HOME/Dev/"
+export xenv_dir_srv="/srv/"
+export xenv_sh_profile="$HOME/.profile"
+
+# ===========
+# Bash Shells
+# ===========
+if [ -n "$BASH_VERSION" ]; then
+    # Source '~/.bash_profile' if it exists.
+    if [ -f "$HOME/.bash_profile" ]; then
+        . "$HOME/.bash_profile"
+    fi
+    # Source '~/.bashrc' if it exists.
+    if [ -f "$HOME/.bashrc" ]; then
+        . "$HOME/.bashrc"
+    fi
+fi

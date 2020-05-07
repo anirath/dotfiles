@@ -1,0 +1,176 @@
+#############################
+# Bash Profile -- ~/.bashrc #
+# ------------------------- #
+# author   : anirath        #
+# created  : 2020.02.23     #
+# modified : 2020.05.07     #
+# ------------------------- #
+#       anirath@pm.me       #
+#############################
+# -------------------------------------------------
+# Sourced by '~/.profile' to configure bash shells.
+# -------------------------------------------------
+# ===========
+# Quick Fixes
+# ===========
+# Quick fix for the lesspipe.
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# Conditional check for interactive shells.
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# Export the '$SHELL' variable with the current shell.
+export SHELL=${SHELL:-${BASH:-/bin/bash}}
+
+# ===============
+# History & Shopt
+# ===============
+# Configure the history file with builtin variables.
+export HISTFILE="$HOME/.bash_history"
+export HISTCONTROL=ignoreboth
+export HISTSIZE=500
+export HISTFILESIZE=1000
+
+# Setup 'shopt' with 'histappend', 'checkwinsize', and 'globstar' enabled.
+shopt -s histappend
+shopt -s checkwinsize
+shopt -s globstar
+
+# =============
+# Color Support
+# =============
+# Conditional check for 'dircolors' support.
+if [ -x /usr/bin/dircolors ]; then
+    # If 'dircolors' exists, and is executable, enable color support for the 'ls' and 'grep' commands.
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    export alias ls='ls --color=auto'
+    export alias dir='dir --color=auto'
+    export alias vdir='vdir --color=auto'
+    export alias grep='grep --color=auto'
+    export alias fgrep='fgrep --color=auto'
+    export alias egrep='egrep --color=auto'
+fi
+
+# Enable colored GCC warnings and notices by exporting the '$GCC_COLORS' builtin variable.
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# =======
+# Imports
+# =======
+# Aliases: ~/.bash_aliases -- contains all of the aliases set up for bash.
+if [ -f "$HOME/.bash_aliases" ]; then
+    . "$HOME/.bash_aliases"
+fi
+
+# Text Formatting: ~/.bash_txt -- exports useful variables for text formatting.
+if [ -f "$HOME/.bash_txt" ]; then
+    . "$HOME/.bash_txt"
+fi
+
+# ======
+# Prompt
+# ======
+# ----------
+# Chroot Fix
+# ----------
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    # If necessary configure the chroot for prompt.
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# ---------
+# Functions
+# ---------
+# prompt_fn_cwd() -- gets the current working directory for the prompt.
+function prompt_fn_cwd () {
+    # Assign a variable the PWD.
+    working_dir=$(pwd)
+    # Check permissions of the CWD.
+    if [ -w $working_dir ]; then
+        # If the CWD is writable then set the text to green.
+        working_dir="${txt_fg_green}"
+    else
+        # If the CWD isn't writable then set the text to red.
+        working_dir="${txt_fg_red}"
+    fi
+}
+
+# prompt_fn_err() -- returns the current error code for use with the prompt.
+function prompt_fn_err () {
+    # Assign the last returned value to a variable.
+	err_code=$?
+	if [ $err_code -ne 0 ]; then
+        # If an error code was returned then format and return the error information for prompt.
+        echo "[${txt_fg_red}Code:${txt_bold}${err_code}${txt_reset}] "
+    else
+        # If no error was returned then just return nothing.
+        echo ""
+	fi
+}
+
+# prompt_fn_git_status() -- returns git information for the prompt.
+function prompt_fn_git_status () {
+    # Use 'git status' piped with 'tee' to check status, then pipe output through 'grep'.
+	status=$(git status 2>&1 | tee)
+	dirty=$(echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?")
+	untracked=$(echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?")
+	ahead=$(echo -n "${status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?")
+	newfile=$(echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?")
+	renamed=$(echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?")
+	deleted=$(echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?")
+	bits=''
+    # Check function's variables to determine git status, and return the corresponding info via '$bits'.
+	if [ "${renamed}" == "0" ]; then
+		bits=" ${txt_fg_magenta}${txt_bold}<>${txt_uline_on}files-renamed${txt_uline_off}<>${txt_reset}${bits}"
+	fi
+	if [ "${ahead}" == "0" ]; then
+		bits=" ${txt_fg_yellow}${txt_bold}**${txt_uline_on}branch-ahead${txt_uline_off}**${txt_reset}${bits}"
+	fi
+	if [ "${newfile}" == "0" ]; then
+		bits=" ${txt_fg_blue}${txt_bold}++${txt_uline_on}files-new${txt_uline_off}++${txt_reset}${bits}"
+	fi
+	if [ "${untracked}" == "0" ]; then
+		bits=" ${txt_fg_cyan}${txt_bold}??${txt_uline_on}files-untracked${txt_uline_off}??${txt_reset}${bits}"
+	fi
+	if [ "${deleted}" == "0" ]; then
+		bits=" ${txt_bg_black}${txt_fg_yellow}${txt_bold}Xx${txt_uline_on}files-deleted${txt_uline_off}xX${txt_reset}${bits}"
+	fi
+	if [ "${dirty}" == "0" ]; then
+		bits=" ${txt_fg_red}${txt_bold}!!${txt_uline_on}dirty${txt_uline_off}!!${txt_reset}${bits}"
+	fi
+	if [ ! "${bits}" == "" ]; then
+	    # If any bits exist in '$bits' then return the bits as parsed output.
+		echo "${bits}${txt_reset}"
+	else
+	    # If no bits were added then just return nothing for git status.
+		return 0
+	fi
+}
+
+# prompt_fn_git_branch() -- checks if CWD is a git repository for the prompt.
+function prompt_fn_git_branch () {
+    # Use 'git' commands piped through 'sed' to determine the git branch.
+	branch=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+	if [ ! "${branch}" == "" ]; then
+	    # If there is a 'git' branch then use 'prompt_fn_git_status()' to return the status for prompt.
+		git_status=$(prompt_fn_git_status)
+		echo ":: ${txt_fg_green}${txt_bold}git:${txt_uline_on}${branch}${txt_reset}${git_status}"
+	else
+	    # If the CWD isn't a valid git repository then just return nothing.
+		return 0
+	fi
+}
+
+# ----------------------
+# Format & Export Prompt
+# ----------------------
+# Assign the '$PS1' variable using functions and text formatting variables with the parsed output for prompt. 
+PS1="\`prompt_fn_err\`${txt_fg_yellow}\t${txt_reset} [${txt_fg_green}\s${txt_reset}] ${txt_fg_magenta}\u"
+PS1="${PS1}${txt_reset}@${txt_fg_cyan}\H${txt_reset} :: \`prompt_fn_cwd\` \w${txt_reset}"
+PS1="${PS1} \`prompt_fn_git_branch\` \n${txt_fg_blue}>>${txt_reset} "
+
+# Export the builtin '$PS1' variable, now formatted in the previous assignments, to set the prompt.
+export PS1

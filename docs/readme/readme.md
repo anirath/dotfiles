@@ -2,7 +2,7 @@
 
 **Homepage -- [anirath.github.io/dotfiles][1]**
 
-**GitHub   -- [anirath/dotfiles][8]**
+**GitHub -- [anirath/dotfiles][8]**
 
 ## WARNING ##
 *This project of mine is just beginning, so expect this **Readme** as well as the rest of the project to be*

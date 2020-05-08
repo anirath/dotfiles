@@ -75,6 +75,14 @@ if [ -f "$HOME/.bash_funcs" ]; then
     . "$HOME/.bash_funcs"
 fi
 
+# ============
+# Custom Paths
+# ============
+# Ruby Gems -- '~/.gems/'
+export GEM_HOME="$HOME/.gem"
+export GEM_PATH="$HOME/.gem"
+export PATH="$PATH:$HOME/.gem/bin/"
+
 # ======
 # Prompt
 # ======

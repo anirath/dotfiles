@@ -21,6 +21,9 @@ Python related files. (`setup.py`, `python_pkg/`, `tests/`, `.travis.yml`, and `
 - Created a **gitignore** file which will be developed as things go. (`.gitignore`)
 - Created a **SendGrid API Key** for this project's new release notifier. (`sendgrid.env`)
 - Created a **PyPi Token** for the entire account of **Anirath**. (`setup.py`)
+#### 02:30 ####
+- Created a new branch for use with **GH-Pages**. (`gh-pages`)
+- Put an index file into the `gh-pages` branch as a placeholder. (`index.html`)
 
 ## Removed ##
 ### 2020.05.07 ###
@@ -30,6 +33,8 @@ Python related files. (`setup.py`, `python_pkg/`, `tests/`, `.travis.yml`, and `
 related files. (`setup.py`, `python-pkg/`, `.travic.yml`, `sendgrid.env`, etc.)
 #### 02:12 ####
 - Removed the **Jekyll** config file used by **GH-Pages**. (`docs/_config.yml`)
+#### 02:30 ####
+- Completely removed everything from the new `gh-pages` branch.
 
 ## Changes ##
 ### 2020.05.07 ###

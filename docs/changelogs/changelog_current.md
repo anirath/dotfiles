@@ -28,6 +28,8 @@ Python related files. (`setup.py`, `python_pkg/`, `tests/`, `.travis.yml`, and `
 ### 2020.05.08 ###
 - Changed mind about *Python Packaging*, **PyPi**, **SendGrid**, etc. So, I removed all relevant **Python**
 related files. (`setup.py`, `python-pkg/`, `.travic.yml`, `sendgrid.env`, etc.)
+#### 02:12 ####
+- Removed the **Jekyll** config file used by **GH-Pages**. (`docs/_config.yml`)
 
 ## Changes ##
 ### 2020.05.07 ###
@@ -44,6 +46,9 @@ related files. (`setup.py`, `python-pkg/`, `.travic.yml`, `sendgrid.env`, etc.)
 - Configured *Python Packaging* via **PyPi** using the newly generated account-wide token for **Anirath**.
 ### 2020.05.08 ###
 - Reorganized the file structure after removing all of the **Python** related files.
+#### 02:12 ####
+- Reconfiguring it so that the **GH-Pages** publishing source will be in a new branch titles `gh-pages`. This
+is also so the `docs/` directory can be used for building project documentation with **Sphinx**.
 
 ## Notes ##
 ### 2020.05.07 ###
